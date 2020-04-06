@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+  {{ error.get() | raw }}
+  {{ flash.get() | raw }}
+  
+  <div class="header_manage">
+  <h2 id="title_manage" >MANAGE ARTICLES PAGE</h2>
+  </div>
+  <div id= "table_art" class="container" style="max-width:90%">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 mx-auto">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Title</th>
+              <th scope="col">Author</th>
+              <th scope="col">Category</th>
+              <th scope="col">Created at</th>
+              <th scope="col">Modified at</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr>
+          {% for art in articles %}
+            <tr>
+              <th scope="row">{{ art.id|e}}</th>
+              <td>{{ art.title|e}}</td>
+              <td>{{ art.author_name|e }}</td>
+               <td>{{ art.category_title|e }}</td>
+              <td>{{ art.created_at|e}}</td>
+              <td>{{ art.modified_at|e}}</td>
+              <td>
+                <button onclick="modifySubmitButton( '{{art.id}}', '{{art.title}}', '{{art.tags}}', '{{art.header}}', '{{art.content}}', '{{art.category_id}}', '{{art.image}}')">Modify</button>
+                <button onclick="location.href='/article/delete?id={{ art.id|e}}'">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="header_manage1">
+  <h5 id="title_manage" >CREATE OR MODIFY AN ARTICLE</h5>
+  </div>
+        <form action="/article/create" method="post" id="articleForm">
+            <div  class="form-group">
+                <label>Title</label>
+                    <input type="text" class="form-control" placeholder="Name" id="name" name="title" required data-validation-required-message="Please enter the title.">
+                    <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-group">
+                <label>Header Presentation</label>
+                    <input type="text" class="form-control" placeholder="Header" id="header" name="header" required data-validation-required-message="Please enter the header presentation.">
+                    <p class="help-block text-danger"></p>
+            </div>
+             <div class="form-group">
+                <label>Tags</label>
+                <ul id="tagsListDisplay">
+                </ul>
+                <input type="text" name="tags" style="display:none" id="tagsList" />
+                <input type="text" id="tagToAdd" />
+                <input type="button" onclick="addTag()" value="Add Tag" />
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Content</label>
+                <textarea class="form-control" id="content" name="content" placeholder="Content of your article here..." rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label >Category</label><br />
+              <select id="category_id" name="category_id">
+                {% for cat in categories %}
+                  <option value="{{cat.id}}">{{cat.title}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+                <label>image link</label>
+                    <input type="text" class="form-control" id="image" placeholder="Image" name="image" required data-validation-required-message="Please enter image link.">
+                    <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-secondary" id="sendArticleButton">Create Article</button>
+            </div>
+        </form>
+        <button type="button" style="visibility:hidden" class="btn btn-secondary" id="createNewArticleButton" onclick='resetArticleForm()'>Create new article</button>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function addTag() {
+      let tag = $('#tagToAdd').val();
+      if (tag.length == 0) {
+        return ;
+      }
+      if (tag[0] != '#') {
+        tag = '#' + tag;
+      }
+      $('#tagsListDisplay').append('<li id="delete_tag_'+tag.substr(1)+'">'+tag+' <button type="button" value="x" onclick=deleteTag("delete_tag_'+tag.substr(1)+'") id="delete_tag_btn_'+tag.substr(1)+'">x</button></li>');
+      let currentTagVal = $('#tagsList').val();
+      $('#tagsList').val(currentTagVal + ' ' + tag);
+      $('#tagToAdd').val('');
+    }
+
+    function deleteTag(classOfTag) {
+      $('#'+classOfTag).remove();
+      let tagToRemove = classOfTag.replace("delete_tag_", "");
+      tagToRemove = "#" + tagToRemove;
+      let tags = $('#tagsList').val();
+      $('#tagsList').val(tags.replace(tagToRemove, ""));
+    }
+
+    function resetArticleForm() {
+      $('#name').val('');
+      $('#header').val('');
+      $('#content').val('');
+      $('#image').val('');
+      $('#tagsList').val('');
+      $('#tagsListDisplay').empty();
+      $('#sendArticleButton').html('Create article');
+      $('#createNewArticleButton').css("visibility", "hidden");
+      $('#articleForm').attr('action', '/article/create');
+    }
+
+    function modifySubmitButton(id, title, tags, header, content, cat_id, image) {
+      $('#name').val(title);
+      $('#header').val(header);
+      $('#content').val(content);
+      $('#category_id').val(cat_id);
+      $('#image').val(image);
+
+      $('#tagsListDisplay').empty();
+      tags = tags.trim();
+
+      let tag_array = tags.split(" "); // convertire ma chaine en tableau 
+      for(var i =0; i< tag_array.length; i++){
+        $('#tagsListDisplay').append('<li id="delete_tag_'+tag_array[i].substr(1)+'">'+tag_array[i]+' <button type="button" value="x" onclick=deleteTag("delete_tag_'+tag_array[i].substr(1)+'") id="delete_tag_btn_'+tag_array[i].substr(1)+'">x</button></li>');
+      }
+      $('#tagsList').val('');
+      $('#tagsList').val(tags);
+
+
+      $('#createNewArticleButton').css("visibility", "visible");
+      $('#sendArticleButton').html('Edit article');
+      $('#articleForm').attr('action', '/article/modify?id='+id);
+    }
+  </script>
+    <div class="foot" >
+      <p class="text_footer">
+        CGV</br>
+        Legal Mentions / RGPD </br>
+        Cookies's gestion</br>
+        <a href="/user/delete" type="button" class="btn btn-outline-fatal my-2 my-sm-0" style="margin-right: 10px; color:white;">Delete my account</a>
+      </p>
+    </div>
+{% endblock %}

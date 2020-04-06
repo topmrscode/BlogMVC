@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+  {{ error.get() | raw }}
+  {{ flash.get() | raw }}
+  <div class="header_manage">
+  <h2 id="title_manage" >MANAGE CATEGORIES</h2>
+  </div>
+  <div class="container" style="max-width:90%">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 mx-auto">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Title</th>
+              <th scope="col">Created at</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          
+          <tr>
+          {% for cat in categories %}
+            <tr>
+              <th scope="row">{{ cat.id|e}}</th>
+              <td>{{ cat.title|e}}</td>
+              <td>{{ cat.created_at|e}}</td>
+              <td>
+                <button onclick="modifySubmitButton( '{{cat.id}}', '{{cat.title}}' )">Modify</button>
+                <button onclick="location.href='/admin/category/delete?id={{ cat.id|e}}'">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="header_manage1">
+          <h5 id="title_manage" >CREATE OR MODIFY A CATEGORY</h5>
+        </div>
+        <form action="/admin/category/create" method="post" id="articleForm">
+            <div class="form-group">
+                <label>Title</label>
+                    <input type="text" class="form-control" placeholder="title" id="name" name="name" required data-validation-required-message="Please enter the title.">
+                    <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-secondary" id="sendArticleButton">Create Category</button>
+            </div>
+        </form>
+        <button type="button" style="visibility:hidden" class="btn btn-secondary" id="createNewArticleButton" onclick='resetArticleForm()'>Create new category</button>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function resetArticleForm() { // remet le formulaire a l etat de base auand j appui sur le create new category
+      $('#name').val('');
+      $('#sendArticleButton').html('Create article');
+      $('#createNewArticleButton').css("visibility", "hidden");
+    }
+
+    function modifySubmitButton(id, title) { // cette fonction recupere l id et le titre de la ctegorie de la ligne sur laquelle j apuui sur le button modify
+      $('#name').val(title); // remplir l input avec le bon nom de categgory actuel 
+      $('#createNewArticleButton').css("visibility", "visible"); // je met en visibilite le boutton create new category
+      $('#sendArticleButton').html('Edit category'); // je change le button create category en edit category
+      $('#articleForm').attr('action', '/admin/category/modify?id='+id); // change l action du formulaire 
+    }
+  </script>
+    <div class="foot" >
+      <p class="text_footer">
+        CGV</br>
+        Legal Mentions / RGPD </br>
+        Cookies's gestion</br>
+        <a href="/user/delete" type="button" class="btn btn-outline-fatal my-2 my-sm-0" style="margin-right: 10px; color:white;">Delete my account</a>
+      </p>
+    </div>
+{% endblock %}

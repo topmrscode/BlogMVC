@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+  {{ error.get() | raw }}
+  {{ flash.get() | raw }}
+  
+  <div class="header_manage">
+  <h2 id="title_manage" >MANAGE USERS PAGE</h2>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 mx-auto">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Username</th>
+              <th scope="col">Email</th>
+              <th scope="col">Activated</th>
+              <th scope="col">Banned</th>
+              <th scope="col">Creation date</th>
+              <th scope="col">Role</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for usr in users %}
+            <tr>
+              <th scope="row">{{ usr.id}}</th>
+              <td>{{ usr.username|e}}</td>
+              <td>{{ usr.email|e}}</td>
+              <td>{{ usr.is_activated|e}}</td>
+              <td>{{ usr.is_banned|e}}</td>
+              <td>{{ usr.created_at|e}}</td>
+              <td>{{ usr.usergroup|e}}</td></br>
+              <td>
+                <input onclick='window.location.assign("/admin/users/activate?id={{ usr.id|e}}&current_status={{ usr.is_activated }}")' type="checkbox" {% if usr.is_activated == 1 %}checked{% endif %} /> Activate
+                <input onclick='window.location.assign("/admin/users/bann?id={{ usr.id|e}}&current_status={{ usr.is_banned }}")' type="checkbox" {% if usr.is_banned == 1 %}checked{% endif %} /> Bann
+                {% if usr.usergroup == "admin" %}
+                <button disabled>not possible</button>
+                {% else %}
+                <button onclick="location.href='/admin/users/delete?id={{ usr.id|e}}'">Delete</button>
+                {% endif %}
+                <select onchange="changeGroupFunction(this.value, {{ usr.id }})" name="changeGroup" id="usergroupChange">
+                  <option value="">--Change User group--</option>
+                  <option value="user">User</option>
+                  <option value="writer">Writer</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        <div class="header_manage1">
+          <h5 id="title_manage" >CREATE NEW USER</h5>
+        </div>
+        <form action="/admin/users/create" name="sentMessage" id="contactForm" method="post" novalidate>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label>Name</label>
+              <input type="text" class="form-control" placeholder="Name" id="name" name="username" required
+                 data-validation-required-message="Please enter the name.">
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label>Email Address</label>
+              <input type="email" class="form-control" placeholder="Email Address" id="email" name="email"
+                required data-validation-required-message="Please enter the email address.">
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group col-xs-12 floating-label-form-group controls">
+              <label>Password</label>
+              <input type="password" class="form-control" placeholder="Password" id="password" name="password"
+               required data-validation-required-message="Please enter the password.">
+              <p class="help-block text-danger"></p>
+            </div>
+            
+            <label for="pet-select">Choose a group:</label>
+
+            <select name="usergroup" id="usergroup">
+                <option value="">--Please choose an option--</option>
+                <option value="user">User</option>
+                <option value="writer">Writer</option>
+                <option value="admin">Admin</option>
+            </select>
+          <div id="success"></div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-secondary" id="sendMessageButton">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function changeGroupFunction(val, id) {
+      window.location.assign("/admin/users/change_group?id="+id+"&new_group="+val);
+    }
+  </script>
+  </div>
+    <div class="foot" >
+      <p class="text_footer">
+        CGV</br>
+        Legal Mentions / RGPD </br>
+        Cookies's gestion</br>
+        <a href="/user/delete" type="button" class="btn btn-outline-fatal my-2 my-sm-0" style="margin-right: 10px; color:white;">Delete my account</a>
+      </p>
+    </div>
+{% endblock %}
+

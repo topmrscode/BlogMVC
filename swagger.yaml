@@ -1,0 +1,55 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: MVC Sample project - PHP
+servers:
+  - url: http://localhost/MVC_Sample_PHP
+tags:
+  - name: Users
+    description: Everything about the users.
+
+paths:
+  /auth/register:
+    get:
+      description: Form view used to register a new user.
+      tags:
+        - Users
+      responses:
+        '302':
+          description: Invalid fields.
+        default:
+          description: Everything is OK.
+
+    post:
+      description: Register a new user.
+      tags:
+        - Users
+      requestBody:
+        description: User informations.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: User created. 
+
+components:
+  schemas:
+    User:
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        username: Loan PETIT
+        email: loan.petit@email.com
+        password: <User Password>

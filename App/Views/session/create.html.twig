@@ -1,0 +1,34 @@
+{# auth/register.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="login_block">
+      <form action="/session/create" name="sentMessage" id="contactForm" method="post" novalidate>
+       <h1>Login</h1>
+      <span class="flash_alert">{{ error.get() | raw }}</span>
+      <span class="flash_success">{{ flash.get() | raw }}</span>
+       <div class="control-group">
+          <div class="form-group floating-label-form-group controls">
+            <label>Email Address</label>
+            <input type="email" class="form-control" placeholder="Email Address" id="email" name="email"
+              required data-validation-required-message="Please enter your email address.">
+            <p class="help-block text-danger"></p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="form-group col-xs-12 floating-label-form-group controls">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Password" id="password" name="password"
+             required data-validation-required-message="Please enter your password.">
+            <p class="help-block text-danger"></p>
+          </div>
+        </div>
+        <div id="success"></div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-secondary" id="sendMessageButton">Register</button>
+        </div>
+        <a id="link" href="/user/create">Do you want to register first ?</a>
+      </form>
+  </div>
+{% endblock %}

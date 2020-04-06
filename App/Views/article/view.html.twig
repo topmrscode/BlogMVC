@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="header">
+      <div class="welcome_message">
+        Welcome, {{user.username}} ! 
+      </div>
+    </div>
+    {{ error.get() | raw }}
+    {{ flash.get() | raw }}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-deck">
+                    <div class="card card_view">
+                        <img class="card-img-top" src="{{viewArticle.image|e }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h1 class="card-title">{{ viewArticle.title|e }}</h1>
+                            <h5 class="card-title">Category : {{ viewArticle.category_title|e }}</h5>
+
+                            <p class="card-text post_view_content">{{ viewArticle.content|e }}</p>
+
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">created at <b>{{ viewArticle.created_at|e }}</b> by <b>{{ viewArticle.author_name|e }} </b></small>
+                        </div>
+                         <div class="card-footer">
+                            <small class="text-muted">Modified at <b>{{ viewArticle.modified_at|e }}</b></small>
+                        </div>
+                        <div class="card-footer">
+                            {% for comment in comments %}
+                                <small class="text-muted">
+                                <span class="post_view_comment_text comment_content_{{comment.id}}">{{ comment.content|e}}</span>
+                                <span style="display:none;width:0" class="comment_content_modify_{{comment.id}}">
+                                    <form style="display:inline;" method="POST" action="/comment/modify?id={{comment.id}}&article_id={{viewArticle.id}}">
+                                        <input type="text" name="content" value="{{comment.content}}"/>
+                                        <input type="submit" value="modify" />
+                                        <input type="button" value="cancel" onclick="stopModify({{comment.id}})" />
+                                    </form>
+                                </span>
+                                
+                                by <b>{{ comment.author_name|e}}</b> at <b>{{ comment.created_at|e}}</b></small>
+                                {% if is_admin == true or comment.author_id == id_user %}
+                                    <a class="post_view_comment_action" href="/comment/delete?id={{comment.id|e}}&article_id={{viewArticle.id}}">Delete</a> 
+                                    {% endif %}
+                                    {% if comment.author_id == id_user %}
+                                    - <a class="post_view_comment_action comment_modify_link_{{comment.id}}" onclick="startModify({{comment.id}})">Modify</a> 
+                                {% endif %}
+                                <br /> 
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+        <h3 id="title_comment">Leave a comment !</h3>
+            <form action="/comment/create?article_id={{viewArticle.id}}" method="post">
+                <div class="form-group">
+                        <input type="text" class="form-control" placeholder="comment" id="comment" name="comment" required data-validation-required-message="Please enter the header presentation."></input>
+                        <p class="help-block text-danger"></p>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-secondary" id="sendMessageButton">Add Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function startModify(id) {// (le startModify quand j appuie sur modify => affiche le formulaire aui est cacher de base quand je clique sur modify ca cache le premier (avec le texte) et affiche le deuxieme (celui avec le formulaire)
+            $('.comment_content_'+id).css('display', 'none'); 
+            $('.comment_content_modify_'+id).css('display', 'inline');
+        }
+        function stopModify(id) { // le stopModify quand j appuie sur ‘cancel’
+            $('.comment_content_'+id).css('display', 'inline');
+            $('.comment_content_modify_'+id).css('display', 'none');
+        }
+    </script>
+      <div class="foot" >
+      <p class="text_footer">
+        CGV</br>
+        Legal Mentions / RGPD </br>
+        Cookies's gestion</br>
+        <a href="/user/delete" type="button" class="btn btn-outline-fatal my-2 my-sm-0" style="margin-right: 10px; color:white;">Delete my account</a>
+      </p>
+    </div>
+{% endblock %}

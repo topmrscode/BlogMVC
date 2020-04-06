@@ -1,0 +1,313 @@
+{# base.html.twig #}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></link>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />  
+      <script src="https://use.fontawesome.com/6a196af7b1.js"></script>
+      <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Itim|Permanent+Marker&display=swap" rel="stylesheet">
+      <title>MVC Application</title>
+      <style>
+        html {
+          height: 100%;
+        }
+        body {
+          min-height: 100%;
+        }
+        .flash_alert {
+          color: rgb(220,20,60);
+        }
+        .flash_success {
+          color: rgb(60,179,113);
+        }
+        .btn btn-outline-info my-2 my-sm-0 {
+          color : white;
+        }
+        
+ {# ------------- LOGIN  AND CONNEXION PAGES ---------------- #}
+        .login_block {
+          background-image: url("https://ilovehdwallpapers.com/thumbs/cute-beautiful-girl-with-photography-camera-4k-image-t2.jpg");
+          background-size: cover;
+          height: -webkit-fill-available;
+          display : flex;
+          align-items : center;
+          justify-content: center;
+        }
+        .login_block form {
+          width:50%;
+          padding: 30px;
+          border: 1px solid #f1f1f1;
+          background: #fff;
+          box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+          font-family: 'Montserrat', sans-serif;
+        }
+        .login_block h1 {
+          text-align: center;
+          color : rgb(220,20,60);
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;
+
+        }
+        #link{
+          color : rgb(220,20,60);
+        }
+        .btn-outline-info {
+          color: rgb(53, 122, 183);
+          border-color: rgb(53, 122, 183);
+        }
+
+        .btn-secondary {
+          background-color:rgb(220,20,60);
+          border-color: rgb(220,20,60);
+        }
+
+        {# ------------- INDEX PAGE ------------------------------- #}
+        .header{
+          background-image: url("https://medias3-2.ubaldi.com/guides/24/images/banniere.jpg");
+          background-size: cover;
+          width: 100%;
+          height: 400px;
+        }
+        .welcome_message {
+          color: white;
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;
+          font-size: 50px;
+          text-align: left;
+          height: -webkit-fill-available;
+          display : flex;
+          align-items : center;
+          justify-content: left;
+          margin-left: 50px;
+        }
+        .container {
+          max-width: 90%;
+        }
+        .filters_title {
+          text-align: center;
+          font-size: 40px;
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;   
+          background-color:rgb(53, 122, 183);
+          color: white;
+        }
+        .filters_cat {
+          text-align: center;
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;       
+        }
+
+        .filters_line {
+          padding-top: 50px;
+        }
+        .filter_subtitle {
+          color: rgb(53, 122, 183);
+          font-weight: bold;
+          
+        }
+        .filter_button {
+          width: 120px;
+          height: 40px;
+          color: white;
+          background-color:rgb(53, 122, 183);
+        }
+        .card {
+          height: 100%;
+        }
+
+        .card-title{
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;
+          color: rgb(53, 122, 183);
+                 
+        }
+        .card-text {
+          font-family: 'EB Garamond', serif;
+
+
+        }
+        .card-in-list .card-img-top {
+          height: 350px;
+        }
+        .card .card_category {
+          color: rgb(53, 122, 183);
+          font-weight: bold;
+          color: rgb(53, 122, 183);
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;
+        }
+        .posts_line {
+          margin-bottom: 20px;
+        }
+        {# ------------- VIEW PAGES ------------------------------- #}
+        .card_view {
+          margin-top: 50px;
+        }
+        
+        .post_view_comment_action {
+          color: rgb(0, 51, 102);
+        }
+        .post_view_comment_text {
+          font-size: 15px;
+          margin-right: 10px;
+          font-family: 'EB Garamond', serif;
+          color : rgb(53, 122, 183);
+        }
+
+        #comment {
+         margin-top: 20px;
+          width: 50%;
+        }
+        #title_comment {
+         font-family: 'EB Garamond', serif;
+          color : rgb(53, 122, 183);
+          padding-top:20px;
+        }
+
+        {# ------------- MANAGE ARTICLES PAGES ------------------------------- #}
+      #title_manage {
+        color: white;
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;
+          font-size: 50px;
+          text-align: left;
+          height: -webkit-fill-available;
+          display : flex;
+          align-items : center;
+          justify-content: left;
+          margin-left: 50px;
+      }
+      #title_manage1 {
+        text-align: center;
+          font-size: 30px;
+          font-family: 'Permanent Marker', cursive;         
+          font-family: 'Itim', cursive;   
+          background-color:rgb(53, 122, 183);
+          color: white;
+          padding-top :20px;
+          padding-bottom :20px;
+      }
+      #table_art{
+        margin-top : 20px;
+        font-family: 'Itim', cursive;  
+      }
+      .header_manage{
+        background-image: url("https://hdwallpapersstores.com/wp-content/uploads/2018/09/Vintage-camera-bag-wallpaper-1200x480.jpg");
+          background-size: cover;
+          width: 100%;
+          height: 400px;
+          margin-top: 0;
+      }
+      .header_manage1{
+        background-image: url("https://images.pexels.com/photos/326316/pexels-photo-326316.jpeg?cs=srgb&dl=close-up-of-vintage-camera-on-white-background-326316.jpg&fm=jpg");
+          background-size: cover;
+          opacity : 0.75;
+          width: 100%;
+          height: 200px;
+          margin-top: 0;    
+      }
+      .form-group {
+        margin-top:20px;
+      }
+      {# -------------admin index PAGES ------------------------------- #}
+     .header_manage2{
+        background-image: url("https://images.cdn1.stockunlimited.net/preview1300/web-banner-with-camera-shutter-design_1955115.jpg");
+          background-size: cover;
+          width: 100%;
+          height: 400px;
+          margin-top: 0;    
+      }
+      .admin_index{
+        margin-top: 20px;
+        font-family: 'Itim', cursive; 
+        text-align: center;
+        margin-bottom : 50px;  
+      }
+      .admin_link {
+        font-family: 'Itim', cursive;  
+        font-size: 18px;
+      }
+
+      .add_user {
+        background-image: url("https://i.ya-webdesign.com/images/businessman-png-icon-1.png");
+        width: 200px;
+        height: 200px;
+        background-size: cover;
+        margin-right : 100px;
+        margin-left : 500px;
+
+      }
+
+      .add_category {
+        background-image: url("https://cdn.onlinewebfonts.com/svg/img_390301.png");
+        width: 200px;
+        height: 200px;
+        background-size: cover;
+      }
+      {# -------------admin MANAGE PAGES ------------------------------- #}
+      .table{
+        margin-bottom : 50px;
+        font-family: 'Itim', cursive;  
+        margin-top: 40px;
+      }
+      #contactForm {
+         font-family: 'Itim', cursive; 
+      }
+      #articleForm {
+         font-family: 'Itim', cursive; 
+      }
+      .foot {
+        background-color: rgb(53, 122, 183);
+        width: 100%;
+        height: 200px;
+        background-size: cover;
+        margin-top : 40px;
+        font-family: 'Itim', cursive; 
+        text-align : center;
+        color : white;
+        font-size : 15px;
+        
+      }
+      .text_footer{
+        padding-top: 70px;
+      }
+
+    
+      
+      </style>
+    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link" href="/article/index">Home <span class="sr-only">(current)</span></a>
+          </li>
+          
+          {% if user.usergroup == "admin" or user.usergroup == "writer"%}
+            <li class="nav-item">
+              <a class="nav-link" href="/article/manage">Manage articles</a>
+            </li>
+          {% endif %}
+        </ul>
+        <a href="/session/delete" type="button" class="btn btn-outline-info my-2 my-sm-0" style="margin-right: 10px; color:white; border: white;">Logout</a>
+        {% if user.usergroup == "admin" %}
+          <a href="/admin" type="button" class="btn btn-outline-info my-2 my-sm-0" style="margin-right: 10px; color:white; border: outset white;">Admin</a>
+        {% endif %}
+      </div>
+    </nav>
+    
+    {% block body %}
+    {% endblock %}
+
+</html>

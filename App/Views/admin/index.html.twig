@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  {{ error.get() | raw }}
+   {{ flash.get() | raw }}
+   <div class="header_manage2">
+      <h2 id="title_manage" >Welcome to the admin {{ user.username }}</h2>
+    </div>
+    <div class="container">
+      <h3 class="admin_index"> What do you want to to?</h3>
+      <div class = "row">
+        <a class="admin_link" href="/admin/users"><div class="add_user"></div></a>
+        <a class="admin_link" href="/admin/category"><div class="add_category"> </div></a>
+      </div>
+    </div>
+     <div class="foot" >
+      <p class="text_footer">
+        CGV</br>
+        Legal Mentions / RGPD </br>
+        Cookies's gestion</br>
+        <a href="/user/delete" type="button" class="btn btn-outline-fatal my-2 my-sm-0" style="margin-right: 10px; color:white;">Delete my account</a>
+      </p>
+    </div>
+
+{% endblock %}

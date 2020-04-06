@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+  <div class="header">
+    <div class="welcome_message">
+      Welcome, {{user.username}} ! 
+    </div>
+  </div>
+  {{ error.get() | raw }}
+  {{ flash.get() | raw }}
+    
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 filters_title">
+      Filters
+    </div>
+  </div>
+  <div class="row filters_line">
+    <div class="col-sm-4 filters_cat">
+      <span class="filter_subtitle">
+        Title
+      </span>
+      <div  style="background: #fff; cursor: pointer; padding: 5px 10px;">
+        <i class="fas fa-bold"></i>&nbsp;
+        <input type="text" id="title_filter" name="title" placeholder="Search by title..." />
+      </div>
+    </div>
+    <div class="col-sm-4 filters_cat">
+      <span class="filter_subtitle">
+        Date range
+      </span>
+      <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px;">
+        <i class="fa fa-calendar"></i>&nbsp;
+        <span></span> <i class="fa fa-caret-down"></i>
+      </div>
+    </div>
+    <div class="col-sm-4 filters_cat">
+      <span class="filter_subtitle">
+        Tags
+      </span>
+      <div  style="background: #fff; cursor: pointer; padding: 5px 10px;">
+        <i class="fas fa-bold"></i>&nbsp;
+        <input type="text" id="tag_filter" name="tags" placeholder="tags..." />
+      </div>
+    </div>
+  </div>
+  <div class="row filters_line">
+    <div class="col-sm-4 filters_cat">
+      <span class="filter_subtitle">
+        Reset filters
+      </span>
+      <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px;">
+        <i class="fa fa-calendar"></i>&nbsp;
+        <input type="button" class="filter_button" value="reset" onclick='window.location.assign("/article/index")' />
+      </div>
+    </div>
+    <div class="col-sm-4 filters_cat">
+      <span class="filter_subtitle">
+        Category
+      </span>
+      <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px;">
+        <i class="fa fa-calendar"></i>&nbsp;
+        <select id="category_filter" class="filter_button" name="category_id">
+          <option selected value="-1">all</option>
+          {% for cat in categories %}
+            <option value="{{cat.id}}">{{cat.title}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-4 filters_cat">
+      <span class="filter_subtitle">
+        Validate filters
+      </span>
+      <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px;">
+        <i class="fa fa-calendar"></i>&nbsp;
+        <input type="button" class="filter_button" value="filter" onclick=filterfnc() />
+      </div>
+    </div>
+  </div>
+  <hr>
+    {% for article in articles %}
+      {% if (loop.index0 in [0, 3, 6, 9, 12, 15, 18, 21]) %}
+        <div class="row posts_line">
+      {% endif %}
+      <div class="col-sm-4">
+        <div class="card card-in-list">
+          <a href="/article/view?id={{article.id|e}}"><img class="card-img-top" src="{{ article.image|e }}" alt="Card image cap"></a>
+          <div class="card-body">
+            <a href="/article/view?id={{article.id|e}}"><h3 class="card-title">{{ article.title|e }}</h3></a>
+            <p class="card-text">{{ article.header|e }}</p>
+            <hr>
+            <p class="card-text"><span class="card_category">Category :</span> {{ article.category_title|e }}</p>
+            <p class="card-text"><span class="card_category">Tags :</span>  {{ article.tags|e }}</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted">created at <b>{{ article.created_at|e }}</b> by <b>{{ article.author_name|e }}</b></small>
+          </div>
+          <div class="card-footer">
+           <small class="text-muted">Modified at <b>{{ article.modified_at|e }}</b></small>
+          </div>
+        </div>
+      </div>
+      {% if (loop.index0 in [2, 5, 8, 11, 14, 17, 20, 23]) %}
+        </div>
+      {% endif %}
+    {% endfor %}
+    </div>
+</div>
+
+    <script type="text/javascript">
+      var start_d = moment();
+      var end_d = moment();
+      
+
+      function filterfnc() {
+        var title = $('#title_filter').val();
+        var tags = $('#tag_filter').val();
+        var category = $('#category_filter').val(); // ca donne les donnes a mon controlller article
+        window.location.assign("/article/index?start="+start_d+"&end="+end_d+"&title="+title+"&category="+category+"&tags="+tags+"&filter=do");
+      }
+  // ------------ GESTION DU DATE PICKER --------
+  // voir github librairy moment.js https://github.com/moment/moment
+      $(function() {
+      
+          var start = moment().subtract(29, 'days'); // affichage des deux date par default 29 jours today -
+          var end = moment();
+      
+          function cb(start, end) { // quand je change une date ca change les deux date en affichage
+              start_d = start;
+              end_d = end;
+              $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          }
+      
+          $('#reportrange').daterangepicker({
+              startDate: start,
+              endDate: end,
+              ranges: { // ce aui s affiche quand on cliaue dessus 
+                 'Today': [moment(), moment()],
+                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                 'This Month': [moment().startOf('month'), moment().endOf('month')],
+                 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+              }
+          }, cb);
+      
+          cb(start, end);
+      
+      });
+</script>
+  <div class="foot" >
+      <p class="text_footer">
+        CGV</br>
+        Legal Mentions / RGPD </br>
+        Cookies's gestion</br>
+        <a href="/user/delete" type="button" class="btn btn-outline-fatal my-2 my-sm-0" style="margin-right: 10px; color:white;">Delete my account</a>
+      </p>
+    </div>
+{% endblock %}
